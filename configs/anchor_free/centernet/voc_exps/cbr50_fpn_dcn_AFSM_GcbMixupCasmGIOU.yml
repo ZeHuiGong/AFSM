@@ -1,0 +1,193 @@
+architecture: CenterNet
+use_gpu: true
+max_iters: 100000
+log_smooth_window: 20
+log_iter: 20
+save_dir: output
+snapshot_iter: 20000
+metric: VOC
+pretrain_weights: https://paddle-imagenet-models-name.bj.bcebos.com/CBResNet50_vd_pretrained.tar
+weights: output/centernet_cbr50_vd_trip_bifpn/model_final
+num_classes: 20
+stack: 1
+# save_prediction_only: True
+
+CenterNet:
+  backbone: CBResNet
+  neck: FPN
+  head: CenterHeadIOU
+  num_classes: 20
+  single_scale: False
+  spatial_scales: [0.03125, 0.0625, 0.125, 0.25]
+
+CBResNet:
+  norm_type: bn
+  norm_decay: 0.
+  depth: 50
+  feature_maps: [3, 4, 5]
+  freeze_at: 2
+  variant: d
+  repeat_num: 2
+  dcn_v2_stages: [3, 4, 5]
+  gcb_stages: [3, 4, 5]
+  gcb_params:
+    ratio: 0.25
+    pooling_type: att
+    fusion_types: [channel_add]
+
+FPN:
+  max_level: 6
+  min_level: 3
+  num_chan: 256
+  spatial_scale: [0.0625, 0.125, 0.25]
+
+CenterHeadIOU:
+  train_batch_size: 16
+  test_batch_size: 1
+  num_classes: 20
+  stack: 1
+  wh_weight: 1.0
+  wh_loss_type: CenterIOULoss
+  top_k: 500
+
+# PostProcess:
+#   use_soft_nms: true
+#   detections_per_im: 100
+#   nms_thresh: 0.001
+#   sigma: 0.5
+
+CenterIOULoss:
+  iou_loss_type: "giou"
+
+CornerMultiscaleTest:
+  multi_scale: True
+
+LearningRate:
+  base_lr: 0.0002
+  schedulers:
+  - !CosineDecay
+    max_iters: 100000
+  - !LinearWarmup
+    start_factor: 0.
+    steps: 1000
+
+OptimizerBuilder:
+  optimizer:
+    type: Adam
+  regularizer: NULL
+
+TrainReader:
+  inputs_def:
+    image_shape: [3, 511, 511]
+    fields: ['image', 'im_id', 'gt_bbox', 'gt_class', 'heatmaps', 'regrs',  'wh', 'reg_mask', 'ind']
+    output_size: [128, 128]
+    max_tag_len: 256
+  dataset:
+    !VOCDataSet
+    dataset_dir: dataset/voc
+    anno_path: trainval.txt
+    use_default_label: true
+    with_background: false
+  sample_transforms:
+  - !DecodeImage
+    to_rgb: False
+    with_mixup: True
+  - !MixupImage
+    alpha: 1.5
+    beta: 1.5
+  - !CornerCrop
+    input_size: [511, 511]
+  - !Resize
+    target_dim: [511, 511]
+  - !RandomFlipImage
+    prob: 0.5
+  - !CornerRandColor
+    saturation: 0.4
+    contrast: 0.4
+    brightness: 0.4
+  - !Lighting
+    eigval: [0.2141788, 0.01817699, 0.00341571]
+    eigvec: [[-0.58752847, -0.69563484, 0.41340352],
+           [-0.5832747, 0.00994535, -0.81221408],
+           [-0.56089297, 0.71832671, 0.41158938]]
+  - !NormalizeImage
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+    is_scale: False
+    is_channel_first: False
+  - !Permute
+    to_bgr: False
+  - !CenterTarget
+    output_size: [128, 128]
+    num_classes: 20
+    max_tag_len: 256
+  batch_size: 16
+  shuffle: true
+  drop_last: true
+  mixup_epoch: 60
+  worker_num: 8
+  use_process: true
+  drop_empty: false
+  num_classes: 20
+  class_aware_sampling: True
+
+EvalReader:
+  inputs_def:
+    fields: ['im_id', 'gt_bbox', 'gt_class', 'is_difficult']
+    output_size: [128, 128]
+    multi_scale: true
+    test_scales: [1]
+    use_flip: True
+  dataset:
+    !VOCDataSet
+    dataset_dir: dataset/voc
+    anno_path: test.txt
+    use_default_label: true
+    with_background: false
+    # sample_num: 10
+  sample_transforms:
+  - !DecodeImage
+    to_rgb: false
+  - !CornerMultiscaleTest
+    test_scales: [1]
+    use_flip: True
+  - !Permute
+    to_bgr: False
+  - !NormalizeImage
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+    is_scale: True
+    is_channel_first: True
+  use_process: true
+  batch_size: 1
+  drop_empty: false
+  worker_num: 2
+  num_classes: 20
+
+TestReader:
+  inputs_def:
+    fields: ['image', 'im_id', 'ratios', 'borders']
+    output_size: [160, 160]
+  dataset:
+    !ImageFolder
+    dataset_dir: dataset/voc
+    anno_path: test.txt
+    use_default_label: true
+    with_background: false
+  sample_transforms:
+  - !DecodeImage
+    to_rgb: false
+  - !CornerCrop
+    is_train: false
+  - !CornerRatio
+    input_size: [639, 639]
+    output_size: [160, 160]
+  - !Permute
+    to_bgr: False
+  - !NormalizeImage
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+    is_scale: True
+    is_channel_first: True
+  batch_size: 1
+  num_classes: 20

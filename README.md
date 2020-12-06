@@ -148,7 +148,8 @@ CUDA_VISIBLE_DEVICES=0
 python tools/eval.py \
 -c configs/anchor_free/centernet/voc_exps/r101_vd_fpn_dcn_AFSM_GcbMixupCasmGIOU.yml \
 -o use_gpu=true \
-weights=output/r101_vd_fpn_dcn_AFSM_GcbMixupCasmGIOU/model_final
+weights=output/r101_vd_fpn_dcn_AFSM_GcbMixupCasmGIOU/model_final \
+--test_scales 1.0
 ```
 
 For testing on the VisDrone-DET validation dataset, simply run:
@@ -156,7 +157,8 @@ For testing on the VisDrone-DET validation dataset, simply run:
 python tools/eval.py \
 -c configs/anchor_free/centernet/visdrone_exps/cbr50_fpn_dcn_AFSM_GcbMixupCasmGIOU.yml \
 -o use_gpu=true \
-weights=output/cbr50_fpn_dcn_AFSM_GcbMixupCasmGIOU/model_final
+weights=output/cbr50_fpn_dcn_AFSM_GcbMixupCasmGIOU/model_final \
+--test_scales 1.0
 ```
 
 Feel free to change the trained wieght with different checkpoint, by setting the ```weights``` parameter.
