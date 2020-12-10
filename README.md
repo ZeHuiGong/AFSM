@@ -1,6 +1,6 @@
 # Towards Better Object Detection in Scale Variation with Adaptive Feature Selection 
 
-This repository is the official implementation of [Towards Better Object Detection in Scale Variation with Adaptive Feature Selection ](), which is based on [PaddleDetection](https://github.com/PaddlePaddle/PaddleDetection).
+This repository is the official implementation of [Towards Better Object Detection in Scale Variation with Adaptive Feature Selection ](https://arxiv.org/abs/2012.03265), which is based on [PaddleDetection](https://github.com/PaddlePaddle/PaddleDetection).
 
 ![Image](demo/Architecture.jpg)
 
@@ -71,7 +71,7 @@ AFSM_Detection
 │   │   ├── trainval.txt
 │   │   ├── label_list.txt
 │   │   ├── VOCdevkit
-│   │   │   ├──VOC2007     
+│   │   │   ├──VOC2007
 │   │   │   ├──VOC2012
 │   ├── visdrone
 │   │   ├── val2019
@@ -81,7 +81,7 @@ AFSM_Detection
 │   │   ├── annotations
 ```
 
-- VisDrone (one of the following two methods): 
+- VisDrone (one of the following two methods):
 
 1. You can go to the [official website](http://aiskyeye.com/login/?redirect_to=http%3A%2F%2Faiskyeye.com%2Fdownload%2Fobject-detection%2F) to download the dataset and annotations (need to register), and transfer the annotation from ```.txt``` to coco ```.json``` format using the following command:
 
@@ -144,7 +144,7 @@ python tools/train.py \
 Once you have trained the network, run the following command to evaluate the performance of the trained model. For example, you want to evaluate the performance trained with Resnet101 backbone, on the VOC dataset, simply run:
 
 ```eval
-CUDA_VISIBLE_DEVICES=0 
+CUDA_VISIBLE_DEVICES=0
 python tools/eval.py \
 -c configs/anchor_free/centernet/voc_exps/r101_vd_fpn_dcn_AFSM_GcbMixupCasmGIOU.yml \
 -o use_gpu=true \
@@ -174,22 +174,22 @@ The comparison results with other state-of-the-art methods on the VisDrone-DET v
 
 |    Method   | Backbone | AP | AP<sup>50<sup>|AP<sup>75<sup>|
 |-------------------------|:---------:|:-------:|:----------:|:-----:|
-Cascade R-CNN | ResNet50       | 24.10          | 42.90          | 23.60          | 0.40          | 2.30          | 21.00          | 35.20          
-Faster R-CNN  | ResNet50       | 23.50          | 43.70          | 22.20          | 0.34          | 2.20          | 18.30          | 35.70           
-RetinaNet     | ResNet50       | 15.10          | 27.70          | 14.30          | 0.17          | 1.30          | 24.60          | 25.80          
-FCOS          | ResNet50       | 16.60          | 28.80          | 16.70          | 0.38          | 2.20          | 24.40          | 24.40          
-HFEA    | ResNeXt101     | 27.10          |  -              |        -        |               |               |                |                
-HFEA   | ResNeXt152     | 30.30          |  -              |         -       |               |               |                |                
-ClusDet  | ResNeXt101     | 32.40          | 56.20          | 31.60          |               |               |                |                
-CPEN+FPEN    | Hourglass104   | 36.70          | 53.20          | **39.50** |               |               |                |                
-DMNet+DSHNet | ResNet50       | 30.30          | 51.80          | 30.90          |               |               |                |                
-DSOD      | ResNet50       | 28.80          | 47.10          | 29.30          |               |               |                |                
-HRDNet     | ResNet18+101   | 28.33          | 49.25          | 28.16          | 0.47          | 3.34          | 36.91          | 36.91          
-HRDNet<sup>+      | ResNeXt50+101  | 35.51          | 62.00          | 35.13          | 0.39          | 3.38          | 30.91          | 46.62          
-Ours     | CBResNet50     | 33.95          | 60.46          | 32.69          | 0.66          | 7.25          | 40.28          | 49.84          
-Ours<sup>+   | CBResNet50     | 37.62          | 65.41          | 37.06          | 0.62          | 7.21          | 43.21          | 56.26          
-Ours     | CBResNet50+DCN | 35.43          | 61.88          | 34.60          | 0.80          | 7.77          | 41.77          | 51.48          
-Ours<sup>+    | CBResNet50+DCN | **39.48** | **66.98** | 39.45          | \textbf{0.82} | \textbf{7.94} | \textbf{44.76} | \textbf{58.46} 
+Cascade R-CNN | ResNet50       | 24.10          | 42.90          | 23.60          | 0.40          | 2.30          | 21.00          | 35.20
+Faster R-CNN  | ResNet50       | 23.50          | 43.70          | 22.20          | 0.34          | 2.20          | 18.30          | 35.70
+RetinaNet     | ResNet50       | 15.10          | 27.70          | 14.30          | 0.17          | 1.30          | 24.60          | 25.80
+FCOS          | ResNet50       | 16.60          | 28.80          | 16.70          | 0.38          | 2.20          | 24.40          | 24.40
+HFEA    | ResNeXt101     | 27.10          |  -              |        -        |               |               |                |
+HFEA   | ResNeXt152     | 30.30          |  -              |         -       |               |               |                |
+ClusDet  | ResNeXt101     | 32.40          | 56.20          | 31.60          |               |               |                |
+CPEN+FPEN    | Hourglass104   | 36.70          | 53.20          | **39.50** |               |               |                |
+DMNet+DSHNet | ResNet50       | 30.30          | 51.80          | 30.90          |               |               |                |
+DSOD      | ResNet50       | 28.80          | 47.10          | 29.30          |               |               |                |
+HRDNet     | ResNet18+101   | 28.33          | 49.25          | 28.16          | 0.47          | 3.34          | 36.91          | 36.91
+HRDNet<sup>+      | ResNeXt50+101  | 35.51          | 62.00          | 35.13          | 0.39          | 3.38          | 30.91          | 46.62
+Ours     | CBResNet50     | 33.95          | 60.46          | 32.69          | 0.66          | 7.25          | 40.28          | 49.84
+Ours<sup>+   | CBResNet50     | 37.62          | 65.41          | 37.06          | 0.62          | 7.21          | 43.21          | 56.26
+Ours     | CBResNet50+DCN | 35.43          | 61.88          | 34.60          | 0.80          | 7.77          | 41.77          | 51.48
+Ours<sup>+    | CBResNet50+DCN | **39.48** | **66.98** | 39.45          | \textbf{0.82} | \textbf{7.94} | \textbf{44.76} | \textbf{58.46}
 
 <sup>+ means multi-scale testing augmentation is employed
 
@@ -199,23 +199,23 @@ we report the results on VOC 2007 test set, in terms of mAP (%).
 
 |    Method   | Backbone | Input size | mAP | FPS |
 |--------------------|:------:|------------------------------:|:----------:|:-----:|
-|Faster R-CNN | ResNet101     | 1000x600   | 76.4           | 5     
-|R-FCN     | ResNet101     | 1000x600   | 80.5           | 9      
-|OHEM  | VGG-16        | 1000x600   | 74.6           | -    
-|R-FCN  | ResNet101+DCN     | 1000x600   | 82.6           | -    
-|CoupleNet  | ResNet101     | 1000x600   | 82.7           | 8.2   
-|DeNet(wide)  | ResNet101     | 512x512    | 77.1           | 33    
-|FPN-Reconfig | ResNet101     | 1000x600   | 82.4           |  -     
-|Yolov2       | DarkNet19     | 544x544    | 78.6           | 40    
-|SSD          | VGG-16        | 513x513    | 78.9           | 19    
-|DSSD         | VGG-16        | 513x513    | 81.5           | 5.5   
-|RefineDet   | VGG-16        | 512x512    | 81.8           | 24    
-|CenterNet  | ResNet101     | 512x512    | 78.7           | 30    
-|CenterNet   | DLA           | 512x512    | 80.7           | 33    
-|HRDNet    | ResNeXt50+101 | 2000x1200  | 82.4           |  -     
-|Ours         | CBResNet50    | 511x511    | 78.2           | 25.08 
-|Ours     | CBResNet50+DCN    | 511x511    | 81.05          | 21.98 
-|Ours     | ResNet101+DCN   | 511x511    | **83.04** | 15.96   
+|Faster R-CNN | ResNet101     | 1000x600   | 76.4           | 5
+|R-FCN     | ResNet101     | 1000x600   | 80.5           | 9
+|OHEM  | VGG-16        | 1000x600   | 74.6           | -
+|R-FCN  | ResNet101+DCN     | 1000x600   | 82.6           | -
+|CoupleNet  | ResNet101     | 1000x600   | 82.7           | 8.2
+|DeNet(wide)  | ResNet101     | 512x512    | 77.1           | 33
+|FPN-Reconfig | ResNet101     | 1000x600   | 82.4           |  -
+|Yolov2       | DarkNet19     | 544x544    | 78.6           | 40
+|SSD          | VGG-16        | 513x513    | 78.9           | 19
+|DSSD         | VGG-16        | 513x513    | 81.5           | 5.5
+|RefineDet   | VGG-16        | 512x512    | 81.8           | 24
+|CenterNet  | ResNet101     | 512x512    | 78.7           | 30
+|CenterNet   | DLA           | 512x512    | 80.7           | 33
+|HRDNet    | ResNeXt50+101 | 2000x1200  | 82.4           |  -
+|Ours         | CBResNet50    | 511x511    | 78.2           | 25.08
+|Ours     | CBResNet50+DCN    | 511x511    | 81.05          | 21.98
+|Ours     | ResNet101+DCN   | 511x511    | **83.04** | 15.96
 
 ## Visualization
 
@@ -224,7 +224,7 @@ Some detection results on the Visdrone-DET validation subset are showed as follo
 ![Image](demo/results2.jpg)
 
 ## Demo
-In addition, one can also infererence the pre-trained model, by given other demo images. Suppose the images are given in ```demo/```. 
+In addition, one can also infererence the pre-trained model, by given other demo images. Suppose the images are given in ```demo/```.
 
 e.g.,
 
@@ -242,4 +242,19 @@ The inference result will be stored at ```$AFSM_Detection/output```.
 If you benefit from our work in your research and product, please consider to cite the following related papers:
 
 ```shell
+@ARTICLE{2020arXiv201203265G,
+       author = {{Gong}, Zehui and {Li}, Dong},
+        title = "{Towards Better Object Detection in Scale Variation with Adaptive Feature Selection}",
+      journal = {arXiv e-prints},
+     keywords = {Computer Science - Computer Vision and Pattern Recognition},
+         year = 2020,
+        month = dec,
+          eid = {arXiv:2012.03265},
+        pages = {arXiv:2012.03265},
+archivePrefix = {arXiv},
+       eprint = {2012.03265},
+ primaryClass = {cs.CV},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2020arXiv201203265G},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
 ```
